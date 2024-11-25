@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Repartidor - Papelería Online</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome (para íconos) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f6fa;
+        }
+
+        .navbar {
+            background-color: #007bff;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .main-container {
+            margin-top: 30px;
+        }
+
+        .pedido-card {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            transition: transform 0.2s ease-in-out;
+            background-color: white;
+        }
+
+        .pedido-card:hover {
+            transform: scale(1.02);
+        }
+
+        .pedido-info {
+            padding: 20px;
+        }
+
+        .pedido-info h5 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .pedido-info p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            height: 45px;
+            font-size: 1rem;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .footer {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: #28a745;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .no-pedidos {
+            text-align: center;
+            color: #555;
+            font-size: 1.2rem;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="header-logo">
+            </a>
+            <div class="ml-auto">
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <h2 class="text-center">Panel de Repartidor</h2>
+
+        <h3 class="mt-4">Pedidos Pendientes</h3>
+        <div class="row">
+            {% for pedido in pedidos_pendientes %}
+            <div class="col-md-4">
+                <div class="pedido-card">
+                    <div class="pedido-info">
+                        <h5>Pedido #{{ pedido[0] }}</h5>
+                        <p><strong>Total:</strong> ${{ pedido[2] }}</p>
+                        <p><strong>Fecha:</strong> {{ pedido[3] }}</p>
+                        <a href="{{ url_for('entregar_pedido', id=pedido[0]) }}" class="btn btn-success btn-block">Marcar como Entregado</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-pedidos">No hay pedidos pendientes.</p>
+            {% endfor %}
+        </div>
+
+        <h3 class="mt-4">Pedidos Entregados</h3>
+        <div class="row">
+            {% for pedido in pedidos_entregados %}
+            <div class="col-md-4">
+                <div class="pedido-card">
+                    <div class="pedido-info">
+                        <h5>Pedido #{{ pedido[0] }}</h5>
+                        <p><strong>Total:</strong> ${{ pedido[2] }}</p>
+                        <p><strong>Fecha:</strong> {{ pedido[3] }}</p>
+                        <p><strong>Estado:</strong> Entregado</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-pedidos">No hay pedidos entregados.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Papelería Online. Todos los derechos reservados. | <a href="/">Volver al Inicio</a></p>
+    </div>
+
+    <!-- jQuery, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

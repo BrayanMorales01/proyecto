@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador - Papelería Online</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome (para íconos) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f6fa;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand img {
+            height: 50px;
+        }
+        .admin-container {
+            margin-top: 30px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-header h2 {
+            font-weight: 600;
+        }
+        .admin-header .btn {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .admin-header .btn:hover {
+            background-color: #218838;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+        .stats-card {
+            border: none;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .stats-card h5 {
+            font-weight: 600;
+        }
+        .stats-card i {
+            font-size: 2.5rem;
+            color: #28a745;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="header-logo">
+            </a>
+            <div class="ml-auto">
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Panel Content -->
+    <div class="container admin-container">
+        <div class="admin-header">
+            <h2>Panel de Administrador</h2>
+            <a href="#addProductModal" class="btn btn-success" data-toggle="modal"><i class="fas fa-plus"></i> Agregar Producto</a>
+            <a href="#addRepartidorModal" class="btn btn-info" data-toggle="modal"><i class="fas fa-user-plus"></i> Agregar Repartidor</a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="stats-card text-center bg-white">
+                    <i class="fas fa-boxes"></i>
+                    <h5>Total Productos</h5>
+                    <p>{{ productos|length }} productos</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center bg-white">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h5>Total Ventas</h5>
+                    <p>${{ total_ventas if total_ventas else 0 }}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center bg-white">
+                    <i class="fas fa-users"></i>
+                    <h5>Total Usuarios</h5>
+                    <p>{{ usuarios|length }} usuarios</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Table -->
+        <div class="mt-5">
+            <h4>Inventario de Productos</h4>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr>
+                        <td><img src="{{ url_for('static', filename=producto[6]) }}" alt="Imagen del producto"></td>
+                        <td>{{ producto[1] }}</td>
+                        <td>{{ producto[2] }}</td>
+                        <td>${{ producto[3] }}</td>
+                        <td>{{ producto[4] }}</td>
+                        <td>
+                            <a href="#editProductModal{{ producto[0] }}" class="btn btn-warning btn-sm" data-toggle="modal">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="{{ url_for('delete_product', id=producto[0]) }}" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- Edit Product Modal -->
+                    <div class="modal fade" id="editProductModal{{ producto[0] }}" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editProductModalLabel">Editar Producto</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ url_for('editar_producto', id=producto[0]) }}" method="POST">
+                                        <div class="form-group">
+                                            <label for="cantidad">Nueva Cantidad</label>
+                                            <input type="number" class="form-control" id="cantidad" name="cantidad" value="{{ producto[4] }}" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-warning btn-block">Actualizar Cantidad</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add Product Modal -->
+        <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addProductModalLabel">Agregar Nuevo Producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('add_product') }}" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="nombre">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripción</label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="precio">Precio</label>
+                                <input type="number" class="form-control" id="precio" name="precio" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidad">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="imagen">Imagen del Producto</label>
+                                <input type="file" class="form-control-file" id="imagen" name="imagen" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">Agregar Producto</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Repartidor Modal -->
+        <div class="modal fade" id="addRepartidorModal" tabindex="-1" role="dialog" aria-labelledby="addRepartidorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addRepartidorModalLabel">Agregar Nuevo Repartidor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('add_repartidor') }}" method="POST">
+                            <div class="form-group">
+                                <label for="nombre_repartidor">Nombre del Repartidor</label>
+                                <input type="text" class="form-control" id="nombre_repartidor" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email_repartidor">Email del Repartidor</label>
+                                <input type="email" class="form-control" id="email_repartidor" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono_repartidor">Teléfono del Repartidor</label>
+                                <input type="tel" class="form-control" id="telefono_repartidor" name="telefono" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="placa_vehiculo">Placa del Vehículo</label>
+                                <input type="text" class="form-control" id="placa_vehiculo" name="placa_vehiculo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-block">Agregar Repartidor</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Papelería Online. Todos los derechos reservados.</p>
+            
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS, jQuery, Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

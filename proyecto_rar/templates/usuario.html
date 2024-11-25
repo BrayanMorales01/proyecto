@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Usuario - Papelería Online</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome (para íconos) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f6fa;
+        }
+        .profile-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.profile-circle-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.user-info p {
+    margin-bottom: 15px;
+}
+
+        .navbar {
+            background-color: #007bff;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .main-container {
+            margin-top: 30px;
+        }
+.profile-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.profile-circle-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.user-info p {
+    margin-bottom: 15px;
+}
+
+        .product-card {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out;
+            background-color: white;
+        }
+
+        .product-card:hover {
+            transform: scale(1.02);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-info h5 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .product-info p {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .product-info .price {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .product-info .btn {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .product-info .btn:hover {
+            background-color: #218838;
+        }
+
+        .historial-title {
+            font-weight: 600;
+            margin-top: 40px;
+        }
+
+        .footer {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: #28a745;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .cart-modal {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .table-container {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .table-container.active {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .table {
+            margin-top: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="btn btn-outline-light ml-3" type="button" data-toggle="modal" data-target="#profileModal">
+                <div class="profile-circle" id="profileInitial"></div>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="header-logo">
+            </a>
+            <div class="ml-auto">
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Cerrar Sesión</a>
+                <button class="btn btn-outline-light ml-3" data-toggle="modal" data-target="#cartModal">
+                    <i class="fas fa-shopping-cart"></i> Ver Carrito
+                </button>
+            </div>
+            <a href="/">Volver al Inicio</a></p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <h2 class="text-center">Nuestros Productos</h2>
+        <div class="row">
+            <!-- Lista de productos -->
+            {% for producto in productos %}
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="{{ url_for('static', filename=producto[6]) }}" alt="Imagen del producto">
+                    <div class="product-info">
+                        <h5>{{ producto[1] }}</h5>
+                        <p>{{ producto[2] }}</p>
+                        <p class="price">${{ producto[3] }}</p>
+                        <form action="{{ url_for('agregar_carrito', id=producto[0]) }}" method="POST">
+                            <div class="form-group">
+                                <label for="cantidad_{{ producto[0] }}">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidad_{{ producto[0] }}" name="cantidad" value="1" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">Añadir al Carrito</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Historial de Pedidos -->
+        <h3 class="historial-title">Historial de Pedidos</h3>
+        <button class="btn btn-primary mb-3" onclick="toggleHistorial()">Ver/Ocultar Historial</button>
+        <div class="table-container" id="historialContainer">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in historial_pedidos %}
+                    <tr>
+                        <td>{{ pedido[0] }}</td>
+                        <td>{{ pedido[2] }}</td>
+                        <td>${{ pedido[1] }}</td>
+                        <td>{{ pedido[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Papelería Online. Todos los derechos reservados.  
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Tu Carrito de Compras</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body cart-modal">
+                    {% if carrito %}
+                    {% for item in carrito %}
+                    <div class="cart-item">
+                        <div>
+                            <img src="{{ url_for('static', filename=item[4]) }}" alt="Imagen del producto">
+                            <span>{{ item[3] }} (x{{ item[1] }})</span>
+                        </div>
+                        <div>
+                            <strong>${{ item[2] * item[1] }}</strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="cart-item">
+                        <strong>Total: ${{ total_carrito }}</strong>
+                    </div>
+                    {% else %}
+                    <p>No tienes productos en el carrito.</p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <form action="{{ url_for('realizar_compra') }}" method="POST">
+                        <button type="submit" class="btn btn-success">Realizar Pedido</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Perfil de Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="profile-circle-large mx-auto" id="profileInitialLarge"></div>
+                    </div>
+                    <div class="user-info">
+                        <p><strong>Nombre:</strong> <span id="userName">{{ usuario[0] }}</span></p>
+                        <p><strong>Email:</strong> <span id="userEmail">{{ usuario[1] }}</span></p>
+                        <form action="{{ url_for('actualizar_direccion') }}" method="POST">
+                            <div class="form-group">
+                                <label for="direccion"><strong>Dirección:</strong></label>
+                                <input type="text" class="form-control" id="direccion" name="direccion" 
+                                       value="{{ usuario[2] if usuario[2] else '' }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Actualizar Dirección</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleHistorial() {
+            const historialContainer = document.getElementById('historialContainer');
+            historialContainer.classList.toggle('active');
+        }
+    </script>
+    <script>
+        function getRandomColor() {
+            const colors = [
+                '#4CAF50', '#2196F3', '#9C27B0', '#FF5722', 
+                '#795548', '#607D8B', '#E91E63', '#3F51B5'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const userName = document.getElementById('userName').textContent;
+            const initial = userName.charAt(0).toUpperCase();
+            const color = getRandomColor();
+            
+            // Configurar círculo pequeño en navbar
+            const profileCircle = document.getElementById('profileInitial');
+            profileCircle.style.backgroundColor = color;
+            profileCircle.textContent = initial;
+            
+            // Configurar círculo grande en modal
+            const profileCircleLarge = document.getElementById('profileInitialLarge');
+            profileCircleLarge.style.backgroundColor = color;
+            profileCircleLarge.textContent = initial;
+        });
+        </script>
+        <script>
+            function getRandomColor() {
+                const colors = [
+                    '#4CAF50', '#2196F3', '#9C27B0', '#FF5722', 
+                    '#795548', '#607D8B', '#E91E63', '#3F51B5'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const userNameElement = document.getElementById('userName');
+                const userName = userNameElement.textContent.trim();
+                const initial = userName.charAt(0).toUpperCase();
+                const color = getRandomColor();
+                
+                // Configurar círculo pequeño en navbar
+                const profileCircle = document.getElementById('profileInitial');
+                profileCircle.style.backgroundColor = color;
+                profileCircle.textContent = initial;
+                
+                // Configurar círculo grande en modal
+                const profileCircleLarge = document.getElementById('profileInitialLarge');
+                profileCircleLarge.style.backgroundColor = color;
+                profileCircleLarge.textContent = initial;
+            });
+            </script>
+</body>
+</html>

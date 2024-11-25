@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Código</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Verificación de Código</h2>
+        <p>Se ha enviado un código a tu correo. Introduce el código para completar el registro.</p>
+        <form method="POST" action="/verify_code">
+            <div class="form-group">
+                <label for="code">Código de Verificación</label>
+                <input type="text" class="form-control" id="code" name="code" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verificar</button>
+        </form>
+    </div>
+</body>
+</html>

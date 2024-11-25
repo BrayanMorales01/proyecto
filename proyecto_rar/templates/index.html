@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papelería Online</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            position: relative;
+        }
+
+        .navbar {
+            background-color: #647caa;
+        }
+        .navbar a { color: #dfdfdf; }
+
+        .navbar-brand img {
+            height: 70px;
+        }
+
+        .hero {
+            height: 300px;
+            color: #f8f9fa;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-family: 'Poppins', sans-serif;
+            color: #eee78b;
+            font-style: italic;
+        }
+
+        .product-card {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card img {
+            width: 200px;
+            height: 230px;
+            border-radius: 15px;
+        }
+
+        footer {
+            background-color: #535379;
+            color: #d2e4f7;
+            padding: 40px 0;
+        }
+
+        footer p {
+            color: #ffffff;
+        }
+
+        footer a {
+            color: #f78631;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        #quienes-somos img,
+        #como-funciona img {
+            width: 170px;
+            height: 170px;
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #694a68;
+            font-weight: 600;
+        }
+
+        h5 {
+            color: #2c2c54;
+        }
+
+        p {
+            color: #7580af;
+        }
+
+        /* Estilos para el banner de cookies */
+        #cookie-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #cookie-banner-content {
+            text-align: center;
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        #cookie-banner button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        /* Deshabilitar scroll y clics mientras está el banner */
+        body.no-scroll {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#quienes-somos">¿Quiénes Somos?</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#como-funciona">¿Cómo Funcionamos?</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Registrarse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/carrito-inicio">carrito</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div id="heroCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{ url_for('static', filename='hero.jpg') }}" class="d-block w-100" alt="Logo">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='hero2.jpg') }}" class="d-block w-100" alt="Logo">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='hero3.jpg') }}" class="d-block w-100" alt="Logo">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Siguiente</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="container mt-5">
+        <div class="row">
+            {% for producto in productos %}
+                <div class="col-md-4 mb-4">
+                    <div class="product-card">
+                        <img src="{{ url_for('static', filename=producto[6]) }}" alt="Imagen del producto">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto[1] }}</h5>
+                            <p class="card-text">{{ producto[2] }}</p>
+                            <p><strong>Precio:</strong> ${{ producto[3] }}</p>
+                            <p><strong>Stock:</strong> {{ producto[4] }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="quienes-somos" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center">¿Quiénes Somos?</h2>
+            <p class="text-center">Somos una papelería con años de experiencia ofreciendo productos de calidad para tus necesidades diarias.</p>
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="header-logo">
+        </div>
+    </section>
+
+    <!-- How We Work Section -->
+    <section id="como-funciona" class="py-5">
+        <div class="container">
+            <h2 class="text-center">¿Cómo Funcionamos?</h2>
+            <p class="text-center">Nuestra plataforma te permite navegar por nuestro inventario y hacer pedidos que te serán entregados rápidamente.</p>
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="header-logo">
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contacto" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center">Contáctanos</h2>
+            <p class="text-center">Para cualquier duda o consulta, puedes escribirnos a <a href="mailto:contacto@papeleria.com">contacto@papeleria.com</a> o llamarnos al +123 456 7890.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2024 Papelería Online. Todos los derechos reservados.</p>
+            <p>Síguenos en nuestras redes sociales:</p>
+            <p>
+                <a href="#">Facebook</a> | 
+                <a href="#">Twitter</a> | 
+                <a href="#">Instagram</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Banner de cookies -->
+    <div id="cookie-banner" class="d-none">
+        <div id="cookie-banner-content">
+            <p>Este sitio web utiliza cookies para mejorar su experiencia. ¿Acepta el uso de cookies?</p>
+            <button id="accept-cookies" class="btn btn-success">Aceptar</button>
+            <button id="reject-cookies" class="btn btn-danger">Rechazar</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var banner = document.getElementById('cookie-banner');
+    
+            // Verifica si ya se ha aceptado o rechazado el uso de cookies en la sesión actual
+            if (!sessionStorage.getItem('cookiesAccepted')) {
+                // Si no, muestra el banner
+                banner.classList.remove('d-none');
+            }
+    
+            document.getElementById('accept-cookies').onclick = function () {
+                // Acepta las cookies, oculta el banner y guarda en sessionStorage
+                banner.style.display = 'none';
+                sessionStorage.setItem('cookiesAccepted', 'true');
+            };
+    
+            document.getElementById('reject-cookies').onclick = function () {
+                // Redirige a la página de cookies si se rechazan
+                window.location.href = "/politica-cookies";
+            };
+        });
+    </script>
+    
+</body>
+</html>
