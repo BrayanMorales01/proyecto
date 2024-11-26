@@ -12,6 +12,18 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
+
+
+@app.route("/")
+def index():
+    return "¡Hola, Render!"
+
+if __name__ == "__main__":
+    # Usar el puerto proporcionado por Render (o 5000 por defecto)
+    port = int(os.environ.get("PORT", 18930))
+    app.run(host="0.0.0.0", port=port)
+
+
 app.secret_key = 'supersecretkey'
 
 EMAIL_ADDRESS = 'paleanempresa@gmail.com'
