@@ -13,15 +13,14 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 
 
-
 @app.route("/")
-def index():
-    return "¡Hola, Render!"
+def home():
+    return render_template("index.html")
 
-if __name__ == "__main__":
-    # Usar el puerto proporcionado por Render (o 5000 por defecto)
-    port = int(os.environ.get("PORT", 18930))
-    app.run(host="0.0.0.0", port=port)
+app = Flask(__name__, static_folder='static')
+
+
+
 
 
 app.secret_key = 'supersecretkey'
@@ -39,11 +38,11 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Configuración de MySQL
-app.config['MYSQL_HOST'] = 'junction.proxy.rlwy.net'
+app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'JoRzuebqENEmDPwRQhVACtjZxfKwTgzp'
-app.config['MYSQL_DB'] = 'railway'
-app.config['MYSQL_PORT'] = 18930
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'papeleria'
+
 
 
 mysql = MySQL(app)
